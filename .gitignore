@@ -1,0 +1,8 @@
+# Imágenes
+*.jpg
+*.jpeg
+*.png
+# Archivos
+*.json
+*.log
+*.txt
