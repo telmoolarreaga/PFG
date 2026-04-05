@@ -51,7 +51,7 @@ SAUVOLA_THRESHOLD_PARAMS = {
 
 # --- Particle Analysis Parameters ---
 DEFAULT_FILTER_PARAMETERS = {
-    'min_area': 0.00,
+    'min_area': 3.0,
     'max_area': 300,
     'min_solidity': 0.3,
     'max_solidity': 1.0,
