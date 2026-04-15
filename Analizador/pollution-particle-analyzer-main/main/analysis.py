@@ -115,18 +115,26 @@ def extract_features_per_particle(filtered_regions, original_img=None, min_area=
         holes = 1 - euler_number
 
         # contorno
-        hull = cv2.convexHull(coords[:,::-1].astype(np.int32))
 
-        hull_area = cv2.contourArea(hull)
-
+        mask = region.image.astype(np.uint8)
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if len(contours) > 0:
+            contour = contours[0]
+            hull = cv2.convexHull(contour)
+            hull_area = cv2.contourArea(hull)
+        else:
+            hull_area = area
+        convexity_defects = max(0, hull_area - area)
         hull_ratio = area/hull_area if hull_area>0 else 0
-
         roughness_index = perim/(2*np.sqrt(np.pi*area)) if area>0 else 0
 
-        convexity_defects = hull_area-area
+    
 
         # fractal dimension simple
-        fractal_dimension = np.log(perim)/np.log(area) if area>1 else 0
+        if area > 1 and perim > 0:
+            fractal_dimension = np.log(perim)/np.log(area)
+        else:
+            fractal_dimension = np.nan
 
         features_list.append({
 
