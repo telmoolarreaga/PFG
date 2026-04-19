@@ -11,67 +11,66 @@ DEFAULT_REGRESSION_PARAMS_PATH = os.path.join(DEFAULT_OUTPUT_DIR, "regression_pa
 DEFAULT_CALIBRATION_DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 
 # --- Image Processing Parameters ---
+# Note: all pixel-based parameters scaled ×2 to match the new 2000×2000 resolution
+# (previously 1000×1000). Area-based parameters scaled ×4 (area grows as resolution²).
 ROI_EXTRACTION_SETTINGS = {
-    "gaussian_blur_kernel": (9, 9),
-    "adaptive_thresh_block_size": 121,
-    "adaptive_thresh_c": 2,
-    "morph_open_kernel": (11, 11),
-    "morph_close_kernel": (21, 21),
-    "contour_area_min_ratio": 0.1, # as ratio of max_image_area
-    "contour_area_max_ratio": 0.7, # as ratio of max_image_area
-    "contour_similarity_threshold": 0.85,
-    "corner_refine_window_size": (5, 5),
-    "corner_adjust_margin": 15
+    "gaussian_blur_kernel":       (17, 17),  # previously (9, 9), scaled ×2 (must be odd)
+    "adaptive_thresh_block_size": 241,       # previously 121, scaled ×2 (must be odd)
+    "adaptive_thresh_c":          2,         # dimensionless, unchanged
+    "morph_open_kernel":          (21, 21),  # previously (11, 11), scaled ×2
+    "morph_close_kernel":         (41, 41),  # previously (21, 21), scaled ×2
+    "contour_area_min_ratio":     0.1,       # ratio of image area, unchanged
+    "contour_area_max_ratio":     0.7,       # ratio of image area, unchanged
+    "contour_similarity_threshold": 0.85,   # dimensionless, unchanged
+    "corner_refine_window_size":  (5, 5),    # subpixel refinement, unchanged
+    "corner_adjust_margin":       30         # previously 15, scaled ×2
 }
 
 GRAYSCALE_CONVERSION_PARAMS = {
-    "target_size": (1000, 1000)
+    "target_size": (2000, 2000)              # previously (1000, 1000)
 }
 
 BACKGROUND_IMPROVEMENT_PARAMS = {
-    "kernel_size": (21, 21),
-    "sigma": 10.0
+    "kernel_size": (41, 41),                 # previously (21, 21), scaled ×2
+    "sigma":       20.0                      # previously 10.0, scaled ×2
 }
 
 CLAHE_PARAMS = {
-    "clip_limit": 0.004, 
-    "nbins": 12 
+    "clip_limit": 0.004,                     # dimensionless, unchanged
+    "nbins":      12                         # dimensionless, unchanged
 }
 
-
 RESCALE_INTENSITY_PARAMS = {
-    "in_range_percent": (0, 20)
+    "in_range_percent": (0, 20)              # percentile-based, unchanged
 }
 
 SAUVOLA_THRESHOLD_PARAMS = {
-    "window_size": 21, 
-    "k": 0.18,         
-    "invert": True
+    "window_size": 41,                       # previously 21, scaled ×2 (must be odd)
+    "k":           0.18,                     # dimensionless, unchanged
+    "invert":      True
 }
 
 # --- Particle Analysis Parameters ---
 DEFAULT_FILTER_PARAMETERS = {
-    'min_area': 3.0,
-    'max_area': 300,
-    'min_solidity': 0.3,
-    'max_solidity': 1.0,
-    'min_aspect_ratio': 0.00,
-    'max_aspect_ratio': 4.0,
-    'min_feret': 0.00,
-    'max_feret': 50.0 
+    'min_area':         12.0,  # previously 3.0,  scaled ×4 (3px² @ 1000→12px² @ 2000)
+    'max_area':         1200,  # previously 300,   scaled ×4
+    'min_solidity':     0.3,   # dimensionless, unchanged
+    'max_solidity':     1.0,   # dimensionless, unchanged
+    'min_aspect_ratio': 0.00,  # dimensionless, unchanged
+    'max_aspect_ratio': 4.0,   # dimensionless, unchanged
+    'min_feret':        0.00,  # unchanged
+    'max_feret':        100.0  # previously 50.0, scaled ×2
 }
 
 # --- Pollution Level Parameters ---
 POLLUTION_CALCULATION_PARAMS = {
-    "papersensor_size": (0.06, 0.06), # meters
-    # Particle diameter and density should be specific to PM10 or PM2.5
+    "papersensor_size": (0.06, 0.06),        # meters, physical constant — unchanged
     "PM25": {
-        "particle_diameter_microns": 2.5, # micrometers
-        "particle_density_g_cm3": 1.65    # g/cm^3
+        "particle_diameter_microns": 2.5,
+        "particle_density_g_cm3":    1.65
     },
     "PM10": {
-        "particle_diameter_microns": 10.0, # micrometers
-        "particle_density_g_cm3": 1.65   # g/cm^3 
+        "particle_diameter_microns": 10.0,
+        "particle_density_g_cm3":    1.65
     }
 }
-
